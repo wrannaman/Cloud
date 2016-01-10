@@ -8,42 +8,49 @@
 html, body, .default-page { height: 100%; }
 h1, h2, h3, h4, h5, p { color: #118798; text-align:center; }
 span { color: #A4A4E4;}
+td { color: white;}
 </style>
 
 <script>
 window.onload = function() {
-  function time() {
-    console.log('updating');
-    var d = new Date();
-    document.getElementById('date').innerHTML = d;
-  }
-  time();
-  setInterval(function(){
-    time()
-  }, 1000);
-
-  getWeather();
-}
-
-function getWeather() {
-  console.log('getting weather', $);
-  $.ajax({
-    url: "http://api.openweathermap.org/data/2.5/weather?APPID=148d53fb6725792816f85617caf28097&zip=90402,US",
-  }).done(function(a, b) {
-      console.log('a', a);
-      console.log('b', b);
-      document.getElementById('name').innerHTML = a.name;
-      document.getElementById('weather').innerHTML = a.weather[0].description;
+  $('body').on('click', '#submit', function(e){
+    e.preventDefault();
+    var url = "/2/products/update/<%= product.id %>";
+    console.log('form?', $('#editForm').serialize());
+    console.log('url', url);
+    $.ajax({
+      url: url,
+      type: "POST",
+      data:  $('#editForm').serialize()
+    }).done(function(res, err) {
+      console.log('res', res);
+        if (!res.error) $('#success').text('There was an error saving your form')
+        else $('#success').text('Update Successful')
+    });
 
   });
-}
+  console.log('date ', new Date("<%= product.startDate %>")  );
+  $('#date').val(new Date("<%= product.startDate %>").toISOString().substring(0, 10))
 
+}
 </script>
 
 <div class="default-page" style="padding-top: 25px; background-color: #101010;">
-  <h1> Hello Cloud! </h1>
-  <h2 style="padding-top: 25px;"> The time is <span id="date"></span> </h2>
-  <div class="weather" style="padding-top: 50px;">
-    <h4> The weather in <span id="name"> </span> is forcasted to be <span id="weather"></span> today.</h4>
-  </div>
+  <h1> Edit Product  </h1>
+  <p> <%= JSON.stringify(product) %> </p>
+  <h1 id="success"></h1>
+  <form action="/2/products/update/<%= product.id %>" method="post" id="editForm">
+    <span>  Name:  </span><input type="text" placeholder="name" name="name" value="<%= product.name %>"/>
+    <br>
+    <span>  Cost:  </span><input type="number" placeholder="cost" name="cost" step="0.01" min="0" value="<%= product.cost %>"/>
+    <br>
+    <span>  Quantity:  </span><input type="number" placeholder="quantity" name="quantity" step="1" min="0" value="<%= product.quantity %>"/>
+    <br>
+    <span>  Available Starting (date) :  </span><input type="date" placeholder="startDate" name="startDate" id="date" />
+    <br>
+    <span>  Color Code:  </span><input type="color" placeholder="color" name="color" value="<%= product.color %>"/>
+    <br>
+    <input type="submit" value="Submit" id="submit">
+  </form>
+
 </div>

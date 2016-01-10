@@ -8,42 +8,40 @@
 html, body, .default-page { height: 100%; }
 h1, h2, h3, h4, h5, p { color: #118798; text-align:center; }
 span { color: #A4A4E4;}
+td { color: white;}
 </style>
 
 <script>
-window.onload = function() {
-  function time() {
-    console.log('updating');
-    var d = new Date();
-    document.getElementById('date').innerHTML = d;
-  }
-  time();
-  setInterval(function(){
-    time()
-  }, 1000);
 
-  getWeather();
-}
-
-function getWeather() {
-  console.log('getting weather', $);
-  $.ajax({
-    url: "http://api.openweathermap.org/data/2.5/weather?APPID=148d53fb6725792816f85617caf28097&zip=90402,US",
-  }).done(function(a, b) {
-      console.log('a', a);
-      console.log('b', b);
-      document.getElementById('name').innerHTML = a.name;
-      document.getElementById('weather').innerHTML = a.weather[0].description;
-
-  });
-}
 
 </script>
 
 <div class="default-page" style="padding-top: 25px; background-color: #101010;">
-  <h1> Hello Cloud! </h1>
-  <h2 style="padding-top: 25px;"> The time is <span id="date"></span> </h2>
-  <div class="weather" style="padding-top: 50px;">
-    <h4> The weather in <span id="name"> </span> is forcasted to be <span id="weather"></span> today.</h4>
-  </div>
+  <h1> All Products </h1>
+  <table style="width:80%; margin: 0 auto; margin-top: 50px;">
+  <tr>
+    <td> id </td>
+    <td>Name</td>
+    <td>Cost</td>
+    <td>Quantity</td>
+    <td>startDate</td>
+    <td>color</td>
+    <td>createdAt</td>
+    <td>updatedAt</td>
+    <td>Edit</td>
+  </tr>
+  <% _.each( products, function( p ){ %>
+    <tr>
+      <td> <%= p.id %> </td>
+      <td><%= p.name %></td>
+      <td><%= p.cost %></td>
+      <td><%= p.quantity %></td>
+      <td><%= p.startDate %></td>
+      <td><%= p.color %></td>
+      <td><%= p.createdAt %></td>
+      <td><%= p.updatedAt %></td>
+      <td><a href="/2/products/edit/<%=p.id%>"><button>Edit</button></a></td>
+    </tr>
+	<% }) %>
+</table>
 </div>
