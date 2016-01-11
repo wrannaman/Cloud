@@ -22,7 +22,7 @@ module.exports = {
     },
     prodMongo: {
       module    : 'sails-mongo',
-      host: '52.34.84.150',
+      host: 'localhost',
       port: 27017,
       // user: 'username',
       // password: 'password',
