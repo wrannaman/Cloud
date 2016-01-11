@@ -16,10 +16,22 @@ module.exports = {
    * Set the default database connection for models in the production        *
    * environment (see config/connections.js and config/models.js )           *
    ***************************************************************************/
-
-  // models: {
-  //   connection: 'someMysqlServer'
-  // },
+ connections:  {
+    localDiskDb: {
+      adapter: 'sails-disk'
+    },
+    prodMongo: {
+      module    : 'sails-mongo',
+      host: '52.34.84.150',
+      port: 27017,
+      // user: 'username',
+      // password: 'password',
+      database: 'school'
+    },
+  },
+  models: {
+    connection: 'prodMongo'
+  },
 
   /***************************************************************************
    * Set the port in the production environment to 80                        *

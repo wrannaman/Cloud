@@ -16,9 +16,22 @@ module.exports = {
    * Set the default database connection for models in the development       *
    * environment (see config/connections.js and config/models.js )           *
    ***************************************************************************/
+   connections:  {
+      localDiskDb: {
+        adapter: 'sails-disk'
+      },
+      devMongo: {
+        module    : 'sails-mongo',
+        host: '52.34.84.150',
+        port: 27017,
+        // user: 'username',
+        // password: 'password',
+        database: 'school'
+      },
+    },
 
-  // models: {
-  //   connection: 'someMongodbServer'
-  // }
+  models: {
+    connection: 'devMongo'
+  }
 
 };
