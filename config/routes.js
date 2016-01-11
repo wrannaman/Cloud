@@ -40,6 +40,8 @@ module.exports.routes = {
   '/2/products'                     : 'ProductsController.list' ,
   '/2/products/edit/:id'            : 'ProductsController.edit' ,
   '/2/products/update/:id'          : 'ProductsController.update',
+  '/2/products/new'                 : 'ProductsController.new',
+
 
   /***************************************************************************
   *                                                                          *

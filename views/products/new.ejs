@@ -5,18 +5,39 @@
 </style>
 
 <style>
-html, body, .default-page { height: 100%; }
+html, body, .default-page { height: 100%; color: #A4A4E4;}
 h1, h2, h3, h4, h5, p { color: #118798; text-align:center; }
 span { color: #A4A4E4;}
 td { color: white;}
+
+input[type="radio"], input[type="checkbox"] {
+  float: left;
+}
+.radios {
+  display: inline-block;
+  width: 100%;
+}
+#newForm {
+  padding: 50px;
+  width: 400px;
+  margin: 0 auto;
+  margin-top: 25px;
+  background: rgba(255,255,255,0.2);
+}
+
+#success {
+  width: 80%;
+  margin: 0 auto;
+  text-align: center;
+}
 </style>
 
 <script>
 window.onload = function() {
   $('body').on('click', '#submit', function(e){
     e.preventDefault();
-    var url = "/2/products/update/<%= product.id %>";
-    var form = $('#editForm').serialize();
+    var url = "/2/products/create";
+    var form = $('#newForm').serialize();
     var errors = 0;
     $('#success').text('')
 
@@ -40,6 +61,7 @@ window.onload = function() {
       $('#success').text(current_text + " You must enter the quantity of the product.")
       errors++;
     }
+
     if ( !$('#gen1').prop('checked')  && !$('#gen2').prop('checked') && !$('#gen3').prop('checked'))
     {
       var current_text = $('#success').text();
@@ -50,7 +72,7 @@ window.onload = function() {
     if ( !$('#seas1').prop('checked')  && !$('#seas2').prop('checked') && !$('#seas3').prop('checked') && !$('#seas4').prop('checked') )
     {
       var current_text = $('#success').text();
-      $('#success').text(current_text + " You must select the seasons the product is for.")
+      $('#success').text(current_text + " You must select who the product is for.")
       errors++;
     }
 
@@ -60,52 +82,42 @@ window.onload = function() {
     $.ajax({
       url: url,
       type: "POST",
-      data:  form,
+      data:  form
     }).done(function(res, err) {
-        if (res.error) $('#success').text('There was an error saving your form')
-        else $('#success').text('Update Successful')
+      console.log('res', res);
+      console.log('');
+        if (res.error) $('#success').text('There was an error saving this product.');
+        else  window.location = window.location.origin + '/2/products';
         setTimeout(function(){
           $('#success').text('');
         }, 3000)
     });
 
+    setTimeout(function(){
+      $('#success').text('');
+    }, 8000)
+
   });
+  console.log('date ', new Date()  );
+  $('#date').val(new Date().toISOString().substring(0, 10))
 
-  $('#date').val(new Date("<%= product.startDate %>").toISOString().substring(0, 10))
-
-  if ( "<%= product.gender %>"  === "male" )  $('#gen1').prop('checked',true);
-  if ( "<%= product.gender %>" === "female" ) $('#gen2').prop('checked',true);
-  if ( "<%= product.gender %>"  === "both" )  $('#gen3').prop('checked',true);
-
-  var seasons = "<%= product.season %>";
-  seasons = seasons.split(',');
-  console.log('seasons', seasons);
-  for (var i=0; i<seasons.length; i++)
-  {
-    if (seasons[i] === "winter")  $('#seas1').prop('checked',true);
-    if (seasons[i] === "spring")  $('#seas2').prop('checked',true);
-    if (seasons[i] === "summer")  $('#seas3').prop('checked',true);
-    if (seasons[i] === "fall")    $('#seas4').prop('checked',true);
-
-  }
 }
 </script>
 <%- partial('./nav') %>
 <div class="default-page" style="padding-top: 25px; background-color: #101010;">
-  <h1> Edit Product  </h1>
-  <p> <%= JSON.stringify(product) %> </p>
-  <h1 id="success"></h1>
-
-  <form action="/2/products/new" method="post" id="editForm">
-    <span>  Name:  </span><input type="text" placeholder="name" name="name" id="name" value="<%= product.name %>"/>
+  <h1> Create A New Product  </h1>
+  <p></p>
+  <p id="success"></p>
+  <form action="/2/products/new" method="post" id="newForm">
+    <span>  Name:  </span><input type="text" id="name" placeholder="name" name="name" value="" required/>
     <br>
-    <span>  Cost:  </span><input type="number" placeholder="cost" name="cost" step="0.01" min="0" id="cost" value="<%= product.cost %>"/>
+    <span>  Cost:  </span><input type="number" id="cost" placeholder="cost" name="cost" step="0.01" min="0" value="" required/>
     <br>
-    <span>  Quantity:  </span><input type="number" placeholder="quantity" name="quantity" step="1" min="0" id="quant" value="<%= product.quantity %>"/>
+    <span>  Quantity:  </span><input type="number" id="quant" placeholder="quantity" name="quantity" step="1" min="0" value="" required/>
     <br>
-    <span>  Available Starting (date) :  </span><input type="date" placeholder="startDate" name="startDate" id="date" />
+    <span>  Available Starting (date) :  </span><input id="date" type="date" placeholder="startDate" name="startDate" id="date" required/>
     <br>
-    <span>  Color Code:  </span><input type="color" placeholder="color" name="color" value="<%= product.color %>"/>
+    <span>  Color Code:  </span><input type="color"  id="color" placeholder="color" name="color" value="" required/>
     <br>
     <div class="radios">
       <span> Whos is the product for? : </span> <br>
@@ -125,7 +137,5 @@ window.onload = function() {
     </div>
     <input type="submit" value="Submit" id="submit">
   </form>
-
-
 
 </div>

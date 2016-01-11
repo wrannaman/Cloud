@@ -13,6 +13,7 @@ module.exports = {
     quantity   : { type: "integer"},
     startDate  : { type: "date"},
     color      : { type: "string"},
-
+    gender     : { type: "string"},
+    season     : { type: "array"},
   }
 };

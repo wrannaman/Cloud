@@ -8,16 +8,32 @@
 module.exports = {
 		create: function(req,res,next) {
 			console.log('create', req.body);
-			Products.create({
-				name       : "test",
-				cost       : 12.37,
-				quantity   : 5,
-				startDate  : new Date(),
-				color      : "#eb6a5a",
-			}).then(function(created){
-				//console.log('created');
-					res.json({created: created})
-			})
+
+			console.log('type', typeof(req.body.season));
+			try {
+				Products.create({
+					name       : req.body.name,
+					cost       : req.body.cost,
+					quantity   : req.body.quantity,
+					startDate  : new Date(req.body.startDate || ""),
+					color      : req.body.color,
+					gender     : req.body.gender,
+					season     : typeof(req.body.season) === 'string' ? [req.body.season] : req.body.season
+				}).then(function(created){
+					//console.log('created');
+					if (created) return res.json({success: true, error: false});
+					else return res.json({error: "New product not created", success: false})
+
+				})
+				.catch(function(err){
+					res.json({err: err})
+				})
+			}
+			catch(e) {
+				return res.json({err: e});
+			}
+
+			console.log('ok');
 
 		},
 		list: function(req,res,next){
@@ -53,7 +69,7 @@ module.exports = {
 			Products
 			.update({id: req.param('id')}, {name: req.body.name, cost: req.body.cost, quantity: req.body.quantity, color: req.body.color})
 			.then(function(product){
-				//console.log('products', product);
+				console.log('products', product);
 				res.json({
 					product: product,
 					success: true,
@@ -66,5 +82,8 @@ module.exports = {
 					error: "error" + err,
 				})
 			})
+		},
+		new: function(req,res,next){
+			res.view('products/new',{})
 		}
 };

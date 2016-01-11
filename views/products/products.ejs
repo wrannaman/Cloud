@@ -16,6 +16,8 @@ td { color: white;}
 
 </script>
 
+<%- partial('./nav') %>
+
 <div class="default-page" style="padding-top: 25px; background-color: #101010;">
   <h1> All Products </h1>
   <table style="width:80%; margin: 0 auto; margin-top: 50px;">
@@ -26,8 +28,8 @@ td { color: white;}
     <td>Quantity</td>
     <td>startDate</td>
     <td>color</td>
-    <td>createdAt</td>
-    <td>updatedAt</td>
+    <td>Gender</td>
+    <td>Seasons</td>
     <td>Edit</td>
   </tr>
   <% _.each( products, function( p ){ %>
@@ -36,10 +38,11 @@ td { color: white;}
       <td><%= p.name %></td>
       <td><%= p.cost %></td>
       <td><%= p.quantity %></td>
-      <td><%= p.startDate %></td>
+      <% var date = new Date(p.startDate); var formattedDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear() %>
+      <td><%= formattedDate %></td>
       <td><%= p.color %></td>
-      <td><%= p.createdAt %></td>
-      <td><%= p.updatedAt %></td>
+      <td><%= p.gender %></td>
+      <td><%= p.season %></td>
       <td><a href="/2/products/edit/<%=p.id%>"><button>Edit</button></a></td>
     </tr>
 	<% }) %>
