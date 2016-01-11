@@ -9,6 +9,21 @@ html, body, .default-page { height: 100%; }
 h1, h2, h3, h4, h5, p { color: #118798; text-align:center; }
 span { color: #A4A4E4;}
 td { color: white;}
+
+#editForm {
+  padding: 50px;
+  width: 400px;
+  margin: 0 auto;
+  margin-top: 25px;
+  background: rgba(255,255,255,0.2);
+}
+
+#success {
+  width: 80%;
+  margin: 0 auto;
+  text-align: center;
+  min-height: 30px;
+}
 </style>
 
 <script>
@@ -63,6 +78,7 @@ window.onload = function() {
       data:  form,
     }).done(function(res, err) {
         if (res.error) $('#success').text('There was an error saving your form')
+        else if (res.err && res.err.error === "E_VALIDATION") $('#success').text('A product with this name already exists! Duplicates are not allowed.')
         else $('#success').text('Update Successful')
         setTimeout(function(){
           $('#success').text('');
@@ -93,7 +109,7 @@ window.onload = function() {
 <%- partial('./nav') %>
 <div class="default-page" style="padding-top: 25px; background-color: #101010;">
   <h1> Edit Product  </h1>
-  <p> <%= JSON.stringify(product) %> </p>
+  <!--# <p> < = JSON.stringify(product)  > </p>-->
   <h1 id="success"></h1>
 
   <form action="/2/products/new" method="post" id="editForm">
@@ -108,19 +124,19 @@ window.onload = function() {
     <span>  Color Code:  </span><input type="color" placeholder="color" name="color" value="<%= product.color %>"/>
     <br>
     <div class="radios">
-      <span> Whos is the product for? : </span> <br>
-        <input type="radio" id="gen1" name="gender" value="male"> Male<br>
-        <input type="radio" id="gen2" name="gender" value="female"> Female<br>
-        <input type="radio" id="gen3" name="gender" value="other"> Both
+      <span> Who's is the product for? : </span> <br>
+        <input type="radio" id="gen1" name="gender" value="male"> <span> Male </span><br>
+        <input type="radio" id="gen2" name="gender" value="female"> <span>Female </span><br>
+        <input type="radio" id="gen3" name="gender" value="other"> <span>Both </span>
     </div>
 
     <div class="radios">
       <span> What seasons is this product for? : </span> <br>
 
-      <input type="checkbox" id="seas1" name="season" value="winter"> Winter <br>
-      <input type="checkbox" id="seas2" name="season" value="spring" > Spring <br>
-      <input type="checkbox" id="seas3" name="season" value="summer" > Summer <br>
-      <input type="checkbox" id="seas4" name="season" value="fall" > Fall <br>
+      <input type="checkbox" id="seas1" name="season" value="winter"> <span>Winter</span> <br>
+      <input type="checkbox" id="seas2" name="season" value="spring"> <span>Spring</span> <br>
+      <input type="checkbox" id="seas3" name="season" value="summer"> <span>Summer</span> <br>
+      <input type="checkbox" id="seas4" name="season" value="fall"> <span>Fall</span> <br>
 
     </div>
     <input type="submit" value="Submit" id="submit">

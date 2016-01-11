@@ -8,7 +8,7 @@
 module.exports = {
 
   attributes: {
-    name       : { type: "string"},
+    name       : { type: "string", unique: true,}, 
     cost       : { type: "float"},
     quantity   : { type: "integer"},
     startDate  : { type: "date"},

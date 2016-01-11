@@ -8,7 +8,12 @@
 html, body, .default-page { height: 100%; }
 h1, h2, h3, h4, h5, p { color: #118798; text-align:center; }
 span { color: #A4A4E4;}
-td { color: white;}
+td {
+    color: white;
+    border: 1px solid white;
+    padding-left: 5px;
+    padding-right: 5px;
+}
 </style>
 
 <script>
@@ -40,7 +45,7 @@ td { color: white;}
       <td><%= p.quantity %></td>
       <% var date = new Date(p.startDate); var formattedDate = (date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear() %>
       <td><%= formattedDate %></td>
-      <td><%= p.color %></td>
+      <td><input type="color" value="<%= p.color %>" disabled="true" /></td>
       <td><%= p.gender %></td>
       <td><%= p.season %></td>
       <td><a href="/2/products/edit/<%=p.id%>"><button>Edit</button></a></td>

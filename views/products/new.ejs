@@ -29,6 +29,7 @@ input[type="radio"], input[type="checkbox"] {
   width: 80%;
   margin: 0 auto;
   text-align: center;
+  min-height: 30px;
 }
 </style>
 
@@ -72,7 +73,7 @@ window.onload = function() {
     if ( !$('#seas1').prop('checked')  && !$('#seas2').prop('checked') && !$('#seas3').prop('checked') && !$('#seas4').prop('checked') )
     {
       var current_text = $('#success').text();
-      $('#success').text(current_text + " You must select who the product is for.")
+      $('#success').text(current_text + " You must select the season the product is for.")
       errors++;
     }
 
@@ -84,13 +85,12 @@ window.onload = function() {
       type: "POST",
       data:  form
     }).done(function(res, err) {
-      console.log('res', res);
-      console.log('');
         if (res.error) $('#success').text('There was an error saving this product.');
+        else if (res.err && res.err.error === "E_VALIDATION") $('#success').text('A product with this name already exists! Duplicates are not allowed.')
         else  window.location = window.location.origin + '/2/products';
         setTimeout(function(){
           $('#success').text('');
-        }, 3000)
+        }, 5000)
     });
 
     setTimeout(function(){
@@ -120,7 +120,7 @@ window.onload = function() {
     <span>  Color Code:  </span><input type="color"  id="color" placeholder="color" name="color" value="" required/>
     <br>
     <div class="radios">
-      <span> Whos is the product for? : </span> <br>
+      <span> Who's is the product for? : </span> <br>
         <input type="radio" id="gen1" name="gender" value="male"> Male<br>
         <input type="radio" id="gen2" name="gender" value="female"> Female<br>
         <input type="radio" id="gen3" name="gender" value="other"> Both

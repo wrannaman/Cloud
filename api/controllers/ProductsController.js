@@ -26,6 +26,7 @@ module.exports = {
 
 				})
 				.catch(function(err){
+					//console.log('err', err);
 					res.json({err: err})
 				})
 			}
@@ -78,9 +79,7 @@ module.exports = {
 			})
 			.catch(function(err){
 				console.log('err', err);
-				res.json({
-					error: "error" + err,
-				})
+				res.json({ err: err })
 			})
 		},
 		new: function(req,res,next){
