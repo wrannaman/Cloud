@@ -8,12 +8,16 @@
 module.exports = {
 
   attributes: {
-    name       : { type: "string", unique: true,}, 
+    name       : { type: "string",},
     cost       : { type: "float"},
     quantity   : { type: "integer"},
     startDate  : { type: "date"},
-    color      : { type: "string"},
-    gender     : { type: "string"},
+    // color      : { type: "string"}, // depricated
+    gender     : {
+      type: 'string',
+      enum: ['male', 'female', 'both']
+    },
     season     : { type: "array"},
+    user       : { model: "users"},
   }
 };

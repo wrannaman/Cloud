@@ -32,13 +32,28 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  '/'                               : 'HomeController.index',
+  '/'                                   : 'HomeController.index',
 
-  'post /2/products/create'         : 'ProductsController.create',
-  '/2/products'                     : 'ProductsController.list' ,
-  '/2/products/edit/:id'            : 'ProductsController.edit' ,
-  '/2/products/update/:id'          : 'ProductsController.update',
-  '/2/products/new'                 : 'ProductsController.new',
+  'post /2/products/create'             : 'ProductsController.create',
+  'get /2/products'                     : 'ProductsController.list' ,
+  'get /2/products/edit/:id'            : 'ProductsController.edit' ,
+  'get /2/products/update/:id'          : 'ProductsController.update',
+  'get /2/products/new'                 : 'ProductsController.new',
+
+
+  'get  /3/products/:user_id'           : 'ProductsController.list' ,
+  'post /3/products/create'             : 'ProductsController.create',
+  'post /3/products/edit'               : 'ProductsController.edit' ,
+  'post /3/products/update'             : 'ProductsController.update',
+  'post /3/products/delete'             : 'ProductsController.new',
+
+  'get /3/users'                        : 'UsersController.getAll',
+  'get /3/users/get/:id'                : 'UsersController.getOne',
+  'post /3/users/create'                : 'UsersController.create',
+  'post /3/users/edit'                  : 'UsersController.edit',
+  'post /3/users/update'                : 'UsersController.update',
+  'get /3/users/delete/:id'             : 'UsersController.delete',
+
 
 
   /***************************************************************************

@@ -7,6 +7,7 @@
 
 module.exports = {
 		create: function(req,res,next) {
+			console.log('must manually enforce unique names across stores.');
 			try {
 				Products.create({
 					name       : req.body.name,
