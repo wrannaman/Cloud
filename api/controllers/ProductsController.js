@@ -5,30 +5,101 @@
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
 
+ // 'get  /3/products'                    : 'ProductsController.all' ,
+ // 'get  /3/products/:user_id'           : 'ProductsController.one' ,
+ // 'post /3/products'                    : 'ProductsController.create',
+ // 'put /3/products/update'              : 'ProductsController.update',
+ // 'delete /3/products/delete'           : 'ProductsController.delete',
+
 module.exports = {
 		create: function(req,res,next) {
-			console.log('must manually enforce unique names across stores.');
-			try {
-				Products.create({
-					name       : req.body.name,
-					cost       : req.body.cost,
-					quantity   : req.body.quantity,
-					startDate  : new Date(req.body.startDate || ""),
-					color      : req.body.color,
-					gender     : req.body.gender,
-					season     : typeof(req.body.season) === 'string' ? [req.body.season] : req.body.season
-				}).then(function(created){
-					if (created) return res.json({success: true, error: false});
-					else return res.json({error: "New product not created", success: false})
+
+			var error = [];
+			if (typeof(req.body.name) === 'undefined') error.push("field 'name' not provided.");
+			if (typeof(req.body.cost) === 'undefined') error.push("field 'cost' not provided.");
+			if (typeof(req.body.quantity) === 'undefined') error.push("field 'quantity' not provided.");
+			if (typeof(req.body.color) === 'undefined') error.push("field 'color' not provided.");
+			if (typeof(req.body.gender) === 'undefined') error.push("field 'gender' not provided.");
+			if (typeof(req.body.season) === 'undefined') error.push("field 'season' not provided.");
+			if (typeof(req.body.user) === 'undefined') error.push("field 'user' not provided.");
+
+			if (typeof(req.body.name) !== 'undefined'&& req.body.name.length === 0) error.push("field 'name' cannot be blank.");
+			if (typeof(req.body.cost) !== 'undefined'&& req.body.cost.length === 0) error.push("field 'cost' cannot be blank.");
+			if (typeof(req.body.quantity) !== 'undefined' && req.body.quantity.length === 0) error.push("field 'quantity' cannot be blank.");
+			if (typeof(req.body.color) !== 'undefined' && req.body.color.length === 0) error.push("field 'color' cannot be blank.");
+			if (typeof(req.body.gender) !== 'undefined' && req.body.gender.length === 0) error.push("field 'gender' cannot be blank.");
+			if (typeof(req.body.season) !== 'undefined' && req.body.season.length === 0) error.push("field 'season' cannot be blank.");
+			if (typeof(req.body.user) !== 'undefined' && req.body.user.length === 0) error.push("field 'user' cannot be blank.");
+
+			if (error.length > 0 ) return res.json({error: error});
+
+			Products.findOne({user: req.body.user, name: req.body.name})
+			.then(function(foundItem){
+				if(foundItem) return res.json({error: ["This user already has a product with that name"]})
+				try {
+					Products.create({
+						name       : req.body.name,
+						cost       : req.body.cost,
+						quantity   : req.body.quantity,
+						startDate  : new Date(typeof(req.body.startDate) !== 'undefined' ?  req.body.startDate : null),
+						color      : req.body.color,
+						gender     : req.body.gender,
+						season     : typeof(req.body.season) === 'string' ? [req.body.season] : req.body.season,
+						user 			 : req.body.user,
+					}).then(function(created){
+						if (created) return res.json({product: created, error: []});
+						else return res.json({error: ["New product not created"]})
+					})
+					.catch(function(err){
+						res.json({err: err})
+					})
+				}
+				catch(e) {
+					return res.json({err: e});
+				}
+
+			})
+			.catch(function(err){
+				return res.json({error:[err]})
+			})
+
+		},
+		all: function(req,res,next){
+			Products.find()
+			.populate('user')
+			.then(function(p){
+				res.json({products: p})
+			})
+		},
+		one: function(req,res,next){
+			var id = req.param('id');
+			Products.findOne({id: id})
+			.populate('user')
+			.then(function(prod){
+				if(!prod) return res.json({error: ["product not found"]});
+				return res.json({product: prod, error: []})
+			})
+			.catch(function(err){
+				return res.json({error: [err]})
+			})
+		},
+		delete: function(req,res,next){
+			var id = req.param('id');
+			if ( typeof(id) === 'undefined' || !id ) return res.json({error: ["product id must be provided"]})
+			Products.findOne({id: id})
+			.then(function(product){
+				if ( !product ) return res.json({error: ["Product not found"]});
+				Products.destroy({id: product.id})
+				.then(function(deleted){
+					return res.json({error: [], deleted: deleted})
 				})
 				.catch(function(err){
-					res.json({err: err})
+					return res.json({error: [err]})
 				})
-			}
-			catch(e) {
-				return res.json({err: e});
-			}
-
+			})
+			.catch(function(err){
+				return res.json({error: [err]})
+			})
 		},
 		list: function(req,res,next){
 			Products.find().then(function(products){
@@ -53,20 +124,70 @@ module.exports = {
 			})
 		},
 		update: function(req,res,next){
-			Products
-			.update({id: req.param('id')}, {name: req.body.name, cost: req.body.cost, quantity: req.body.quantity, color: req.body.color})
+			var error = [];
+
+			if (typeof(req.body.id) === 'undefined') error.push("field 'id' not provided.");
+
+			if (typeof(req.body.name) === 'undefined') error.push("field 'name' not provided.");
+			if (typeof(req.body.cost) === 'undefined') error.push("field 'cost' not provided.");
+			if (typeof(req.body.quantity) === 'undefined') error.push("field 'quantity' not provided.");
+			if (typeof(req.body.color) === 'undefined') error.push("field 'color' not provided.");
+			if (typeof(req.body.gender) === 'undefined') error.push("field 'gender' not provided.");
+			if (typeof(req.body.season) === 'undefined') error.push("field 'season' not provided.");
+			if (typeof(req.body.user) === 'undefined') error.push("field 'user' not provided.");
+
+			if (typeof(req.body.name) !== 'undefined'&& req.body.name.length === 0) error.push("field 'name' cannot be blank.");
+			if (typeof(req.body.cost) !== 'undefined'&& req.body.cost.length === 0) error.push("field 'cost' cannot be blank.");
+			if (typeof(req.body.quantity) !== 'undefined' && req.body.quantity.length === 0) error.push("field 'quantity' cannot be blank.");
+			if (typeof(req.body.color) !== 'undefined' && req.body.color.length === 0) error.push("field 'color' cannot be blank.");
+			if (typeof(req.body.gender) !== 'undefined' && req.body.gender.length === 0) error.push("field 'gender' cannot be blank.");
+			if (typeof(req.body.season) !== 'undefined' && req.body.season.length === 0) error.push("field 'season' cannot be blank.");
+			if (typeof(req.body.user) !== 'undefined' && req.body.user.length === 0) error.push("field 'user' cannot be blank.");
+
+			if (error.length > 0) return res.json({error: error});
+
+
+			Products.findOne({id: req.body.id})
 			.then(function(product){
-				res.json({
-					product: product,
-					success: true,
-					error  : null,
+				if(!product) return res.json({error: ["product not found"]});
+
+				Products.findOne({user: req.body.user, name: req.body.name})
+				.then(function(foundItem){
+					if(foundItem && foundItem.id != req.body.id) return res.json({error: ["This user already has a product with that name"]})
+
+					Products.update({id: req.body.id}, {
+						name: req.body.name,
+						cost: req.body.cost,
+						quantity: req.body.quantity,
+						color: req.body.color,
+						gender: req.body.gender,
+						season: req.body.season,
+						user: req.body.user,
+					})
+					.then(function(product){
+						if(!product) return res.json({error: ["product not updated"]});
+
+						res.json({
+							product: product,
+							error  : [],
+						});
+					})
+					.catch(function(err){
+						res.json({ err: err });
+					})
 				})
+				.catch(function(err){
+					return res.json({error: err});
+				})
+
 			})
 			.catch(function(err){
-				res.json({ err: err })
+				return res.json({error: [err]});
 			})
 		},
 		new: function(req,res,next){
 			res.view('products/new',{})
 		}
+
+
 };

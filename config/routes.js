@@ -34,36 +34,24 @@ module.exports.routes = {
 
   '/'                                   : 'HomeController.index',
 
-  'post /2/products/create'             : 'ProductsController.create',
-  'get /2/products'                     : 'ProductsController.list' ,
-  'get /2/products/edit/:id'            : 'ProductsController.edit' ,
-  'get /2/products/update/:id'          : 'ProductsController.update',
-  'get /2/products/new'                 : 'ProductsController.new',
+  // 'post /2/products/create'             : 'ProductsController.create',
+  // 'get /2/products'                     : 'ProductsController.list' ,
+  // 'get /2/products/edit/:id'            : 'ProductsController.edit' ,
+  // 'get /2/products/update/:id'          : 'ProductsController.update',
+  // 'get /2/products/new'                 : 'ProductsController.new',
 
 
-  'get  /3/products/:user_id'           : 'ProductsController.list' ,
-  'post /3/products/create'             : 'ProductsController.create',
-  'post /3/products/edit'               : 'ProductsController.edit' ,
-  'post /3/products/update'             : 'ProductsController.update',
-  'post /3/products/delete'             : 'ProductsController.new',
+  'get  /3/products'                    : 'ProductsController.all' ,
+  'get  /3/products/:id'                : 'ProductsController.one' ,
+  'post /3/products'                    : 'ProductsController.create',
+  'put /3/products'                     : 'ProductsController.update',
+  'delete /3/products/:id'              : 'ProductsController.delete',
 
   'get /3/users'                        : 'UsersController.getAll',
-  'get /3/users/get/:id'                : 'UsersController.getOne',
-  'post /3/users/create'                : 'UsersController.create',
-  'post /3/users/edit'                  : 'UsersController.edit',
-  'post /3/users/update'                : 'UsersController.update',
-  'get /3/users/delete/:id'             : 'UsersController.delete',
+  'get /3/users/:id'                    : 'UsersController.getOne',
+  'post /3/users'                       : 'UsersController.create',
+  'put /3/users'                        : 'UsersController.update',
+  'delete /3/users/:id'                 : 'UsersController.delete',
 
-
-
-  /***************************************************************************
-  *                                                                          *
-  * Custom routes here...                                                    *
-  *                                                                          *
-  * If a request to a URL doesn't match any of the custom routes above, it   *
-  * is matched against Sails route blueprints. See `config/blueprints.js`    *
-  * for configuration options and examples.                                  *
-  *                                                                          *
-  ***************************************************************************/
 
 };

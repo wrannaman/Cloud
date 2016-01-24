@@ -8,16 +8,12 @@
 module.exports = {
 
   attributes: {
-    name       : { type: "string",},
-    cost       : { type: "float"},
-    quantity   : { type: "integer"},
-    startDate  : { type: "date"},
-    // color      : { type: "string"}, // depricated
-    gender     : {
-      type: 'string',
-      enum: ['male', 'female', 'both']
-    },
-    season     : { type: "array"},
-    user       : { model: "users"},
+    name         : { type: "string"},
+    cost         : { type: "float"},
+    quantity     : { type: "integer", min: 0},
+    startDate    : { type: "datetime", defaultsTo: new Date()},
+    gender       : { type: "string", enum: ['male', 'female', 'both'] },
+    season       : { type: "array"},
+    user         : { model: "users", required: true},
   }
 };
