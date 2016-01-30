@@ -6,10 +6,9 @@ otherwise you will get a not found error.
 Users delete function deletes all products associated with that user as well. This is not the
 case for product deletion. It would not make sense to delete the user account when deleting a product.
 
-Users Test
-
-'get /3/users'                        : 'UsersController.getAll',
-'get /3/users/:id'                    : 'UsersController.getOne',
-'post /3/users'                       : 'UsersController.create',
-'put /3/users'                        : 'UsersController.update',
-'delete /3/users/:id'                 : 'UsersController.delete',
+To run:
+  - install node
+  - install npm
+  - $ npm i
+  - $ sails lift
+  - visit localhost:1337
