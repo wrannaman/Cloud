@@ -96,19 +96,24 @@ module.exports = {
 			Users.findOne({id: req.body.id})
 			.then(function(user){
 				if ( !user ) return res.json({error: ["User not found."]});
-				Users.update({id: req.body.id},{
-					firstName      : req.body.firstName,
-					lastName       : req.body.lastName,
-					email  	 			 : req.body.email,
-					password     	 : req.body.password
-				}).then(function(created){
-					if (created) return res.json({user: created, error: []});
-					else return res.json({error: ["New user not created"] })
-				})
-				.catch(function(err){
-					res.json({err: [err]})
-				})
-			})
+			    Users.findOne({email: req.body.email})
+          .then(function(emailUser){
+            if (typeof(emailUser) !== 'undefined' && emailUser !== 'undefined' && emailUser.id !== user.id) return res.json({error: ["This email address is in use by another user."]})
+            Users.update({id: req.body.id},{
+              firstName      : req.body.firstName,
+              lastName       : req.body.lastName,
+              email  	 			 : req.body.email,
+              password     	 : req.body.password
+            }).then(function(created){
+              if (created) return res.json({user: created, error: []});
+              else return res.json({error: ["New user not created"] })
+            })
+            .catch(function(err){
+              console.log('err', err);
+              res.json({error: [err]})
+            })
+          })
+			});
 
 		}
 		catch(e) {

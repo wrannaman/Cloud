@@ -15,5 +15,6 @@ module.exports = {
     gender       : { type: "string", enum: ['male', 'female', 'both'] },
     season       : { type: "array"},
     user         : { model: "users", required: true},
+    photo        : { type: "string", defaultsTo: null},
   }
 };

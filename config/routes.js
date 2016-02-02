@@ -46,6 +46,7 @@ module.exports.routes = {
   'post /3/products'                    : 'ProductsController.create',
   'put /3/products'                     : 'ProductsController.update',
   'delete /3/products/:id'              : 'ProductsController.delete',
+  'post /3/upload_photo'                : 'ProductsController.upload_photo',
 
   'get /3/users'                        : 'UsersController.getAll',
   'get /3/users/:id'                    : 'UsersController.getOne',

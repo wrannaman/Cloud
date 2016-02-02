@@ -125,6 +125,7 @@ module.exports = {
 		},
 		update: function(req,res,next){
 			var error = [];
+			console.log('update', req.body);
 
 			if (typeof(req.body.id) === 'undefined') error.push("field 'id' not provided.");
 
@@ -143,18 +144,18 @@ module.exports = {
 			if (typeof(req.body.gender) !== 'undefined' && req.body.gender.length === 0) error.push("field 'gender' cannot be blank.");
 			if (typeof(req.body.season) !== 'undefined' && req.body.season.length === 0) error.push("field 'season' cannot be blank.");
 			if (typeof(req.body.user) !== 'undefined' && req.body.user.length === 0) error.push("field 'user' cannot be blank.");
-
 			if (error.length > 0) return res.json({error: error});
-
 
 			Products.findOne({id: req.body.id})
 			.then(function(product){
 				if(!product) return res.json({error: ["product not found"]});
-
 				Products.findOne({user: req.body.user, name: req.body.name})
 				.then(function(foundItem){
 					if(foundItem && foundItem.id != req.body.id) return res.json({error: ["This user already has a product with that name"]})
-
+					console.log('ok');
+					var photo = typeof(foundItem) !== 'undefined' && typeof(foundItem.photo) !== 'undefined' && foundItem.photo ? foundItem.photo : null;
+					console.log('photos', photo);
+					console.log('photo test', typeof(req.body.photo) !== 'undefined' ? req.body.photo : photo);
 					Products.update({id: req.body.id}, {
 						name: req.body.name,
 						cost: req.body.cost,
@@ -163,6 +164,7 @@ module.exports = {
 						gender: req.body.gender,
 						season: req.body.season,
 						user: req.body.user,
+						photo: req.body.photo ? req.body.photo : photo
 					})
 					.then(function(product){
 						if(!product) return res.json({error: ["product not updated"]});
@@ -187,6 +189,25 @@ module.exports = {
 		},
 		new: function(req,res,next){
 			res.view('products/new',{})
+		},
+		upload_photo: function(req,res,next) {
+			var fs = require('fs');
+			var mkdirp = require('mkdirp');
+			var rimraf = require('rimraf');
+			var base64 = require('base64Image');
+			var name =  new Date().getTime();
+			console.log('name', name);
+			var options = {filename: name, localFile: true, filePath: 'assets/images/' };
+			var imageData = new Buffer(req.body.img, 'base64');
+
+			base64.base64decoder(imageData, options, function (err, saved) {
+				console.log('b64', err, saved);
+
+				return res.json({
+						image: 'images/' + name + '.jpg'
+				}); // res json
+
+			}); // base 64 decoder
 		}
 
 
