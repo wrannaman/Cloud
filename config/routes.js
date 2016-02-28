@@ -6,7 +6,7 @@
  *
  * If Sails receives a URL that doesn't match any of the routes below,
  * it will check for matching files (images, scripts, stylesheets, etc.)
- * in your assets directory.  e.g. `http://localhost:1337/images/foo.jpg`
+ * in your assets directory.  e.g. `http:/localhost:1337/images/foo.jpg`
  * might match an image file: `/assets/images/foo.jpg`
  *
  * Finally, if those don't match either, the default 404 handler is triggered.
@@ -17,7 +17,7 @@
  * CoffeeScript for the front-end.
  *
  * For more information on configuring custom routes, check out:
- * http://sailsjs.org/#!/documentation/concepts/Routes/RouteTargetSyntax.html
+ * http:/sailsjs.org/#!/documentation/concepts/Routes/RouteTargetSyntax.html
  */
 
 module.exports.routes = {
@@ -35,24 +35,36 @@ module.exports.routes = {
   '/'                                   : 'HomeController.index',
 
   // 'post /2/products/create'             : 'ProductsController.create',
-  // 'get /2/products'                     : 'ProductsController.list' ,
-  // 'get /2/products/edit/:id'            : 'ProductsController.edit' ,
-  // 'get /2/products/update/:id'          : 'ProductsController.update',
-  // 'get /2/products/new'                 : 'ProductsController.new',
+  // / 'get /2/products'                     : 'ProductsController.list' ,
+  // / 'get /2/products/edit/:id'            : 'ProductsController.edit' ,
+  // / 'get /2/products/update/:id'          : 'ProductsController.update',
+  // / 'get /2/products/new'                 : 'ProductsController.new',
 
 
-  'get  /3/products'                    : 'ProductsController.all' ,
-  'get  /3/products/:id'                : 'ProductsController.one' ,
-  'post /3/products'                    : 'ProductsController.create',
-  'put /3/products'                     : 'ProductsController.update',
-  'delete /3/products/:id'              : 'ProductsController.delete',
-  'post /3/upload_photo'                : 'ProductsController.upload_photo',
+  'get  /products'                    : 'ProductsController.all' ,
+  'get  /products/:id'                : 'ProductsController.one' ,
+  'get /products/all/:id'             : 'ProductsController.allUser',
+  'post /products'                    : 'ProductsController.create',
+  'put /products'                     : 'ProductsController.update',
+  'delete /products/:id'              : 'ProductsController.delete',
+  'post /upload_photo'                : 'ProductsController.upload_photo',
 
-  'get /3/users'                        : 'UsersController.getAll',
-  'get /3/users/:id'                    : 'UsersController.getOne',
-  'post /3/users'                       : 'UsersController.create',
-  'put /3/users'                        : 'UsersController.update',
-  'delete /3/users/:id'                 : 'UsersController.delete',
+  'get /users'                        : 'UserController.getAll',
+  'get /users/:id'                    : 'UserController.getOne',
+  'post /users'                       : 'UserController.create',
+  'put /users'                        : 'UserController.update',
+  'delete /users/:id'                 : 'UserController.delete',
 
+  'get /login'                        : 'AuthController.login',
+  'get /logout'                       : 'AuthController.logout',
+  'get /register'                     : 'AuthController.register',
+
+  'post /auth/local'                  : 'AuthController.callback',
+  'post /auth/local/:action'          : 'AuthController.callback',
+
+  'get /auth/:provider'               : 'AuthController.provider',
+  'get /auth/:provider/callback'      : 'AuthController.callback',
+  'get /auth/:provider/:action'       : 'AuthController.callback',
+  'get /passport'                     : 'AuthController.passports',
 
 };

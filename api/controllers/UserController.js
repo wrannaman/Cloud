@@ -1,5 +1,5 @@
 /**
- * UsersController
+ * UserController
  *
  * @description :: Server-side logic for managing users
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
@@ -26,10 +26,10 @@ module.exports = {
 
 		try {
 			// create
-			Users.findOne({email: req.body.email})
+			User.findOne({email: req.body.email})
 			.then(function(user){
 				if ( user ) return res.json({error: ["another user is already registered with this email address"]});
-				Users.create({
+				User.create({
 					firstName      : req.body.firstName,
 					lastName       : req.body.lastName,
 					email  	 			 : req.body.email,
@@ -55,7 +55,7 @@ module.exports = {
 		var id = req.param('id');
 		console.log('id', id);
 		if (typeof(id) === 'undefined' ) return res.json({error:["id parameter required"]});
-		Users.findOne({id: id})
+		User.findOne({id: id})
 		.then(function(user){
 			if( !user ) return res.json({error: ["user not found"]})
 			res.json({user: user, error: []})
@@ -66,7 +66,7 @@ module.exports = {
 
 	},
 	getAll : function(req,res,next){
-		Users.find()
+		User.find()
 		.then(function(users){
 			return res.json({users: users, error: []})
 		})
@@ -78,12 +78,8 @@ module.exports = {
 		if (typeof(req.body.id) === 'undefined') error.push("field 'id' not provided.");
 		if (typeof(req.body.firstName) === 'undefined') error.push("field 'firstName' not provided.");
 		if (typeof(req.body.lastName) === 'undefined') error.push("field 'lastName' not provided.");
-		if (typeof(req.body.email) === 'undefined') error.push("field 'email' not provided.");
-		if (typeof(req.body.password) === 'undefined') error.push("field 'password' not provided.");
 		if (typeof(req.body.firstName) !== 'undefined'&& req.body.firstName.length === 0) error.push("field 'firstName' cannot be blank.");
 		if (typeof(req.body.lastName) !== 'undefined'&& req.body.lastName.length === 0) error.push("field 'lastName' cannot be blank.");
-		if (typeof(req.body.email) !== 'undefined' && req.body.email.length === 0) error.push("field 'email' cannot be blank.");
-		if (typeof(req.body.password) !== 'undefined' && req.body.password.length === 0) error.push("field 'password' cannot be blank.");
 		if (error.length > 0 ) return res.json({error: error});
 
 		// firstName  : { type: "string" },
@@ -93,13 +89,13 @@ module.exports = {
 
 		try {
 			// create
-			Users.findOne({id: req.body.id})
+			User.findOne({id: req.body.id})
 			.then(function(user){
 				if ( !user ) return res.json({error: ["User not found."]});
-			    Users.findOne({email: req.body.email})
+			    User.findOne({email: req.body.email})
           .then(function(emailUser){
             if (typeof(emailUser) !== 'undefined' && emailUser !== 'undefined' && emailUser.id !== user.id) return res.json({error: ["This email address is in use by another user."]})
-            Users.update({id: req.body.id},{
+            User.update({id: req.body.id},{
               firstName      : req.body.firstName,
               lastName       : req.body.lastName,
               email  	 			 : req.body.email,
@@ -126,11 +122,11 @@ module.exports = {
 		console.log('delete');
 		var id = req.param('id');
 		if ( typeof(id) === 'undefined' || !id ) return res.json({error: ["user id must be provided"]})
-		Users.findOne({id: id})
+		User.findOne({id: id})
 		.then(function(user){
 			console.log('user', user);
 			if ( !user ) return res.json({error: ["User not found"]});
-			Users.destroy({id: user.id})
+			User.destroy({id: user.id})
 			.then(function(deletedUser){
 				// delete all products associated with user.
 				Products.find({user: user.id})

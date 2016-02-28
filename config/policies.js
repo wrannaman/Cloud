@@ -26,7 +26,18 @@ module.exports.policies = {
   *                                                                          *
   ***************************************************************************/
 
-  // '*': true,
+   '*': ['passport'],
+   APIController: {
+    '*': [ 'passport' ],
+    login: true,
+    logout: true,
+    register: true,
+    passports: true,
+    users: true,
+    provider: true,
+    callback: true,
+    disconnect: true,
+  },
 
   /***************************************************************************
   *                                                                          *

@@ -18,7 +18,7 @@ module.exports = {
 			if (typeof(req.body.name) === 'undefined') error.push("field 'name' not provided.");
 			if (typeof(req.body.cost) === 'undefined') error.push("field 'cost' not provided.");
 			if (typeof(req.body.quantity) === 'undefined') error.push("field 'quantity' not provided.");
-			if (typeof(req.body.color) === 'undefined') error.push("field 'color' not provided.");
+			//if (typeof(req.body.color) === 'undefined') error.push("field 'color' not provided.");
 			if (typeof(req.body.gender) === 'undefined') error.push("field 'gender' not provided.");
 			if (typeof(req.body.season) === 'undefined') error.push("field 'season' not provided.");
 			if (typeof(req.body.user) === 'undefined') error.push("field 'user' not provided.");
@@ -26,7 +26,7 @@ module.exports = {
 			if (typeof(req.body.name) !== 'undefined'&& req.body.name.length === 0) error.push("field 'name' cannot be blank.");
 			if (typeof(req.body.cost) !== 'undefined'&& req.body.cost.length === 0) error.push("field 'cost' cannot be blank.");
 			if (typeof(req.body.quantity) !== 'undefined' && req.body.quantity.length === 0) error.push("field 'quantity' cannot be blank.");
-			if (typeof(req.body.color) !== 'undefined' && req.body.color.length === 0) error.push("field 'color' cannot be blank.");
+			//if (typeof(req.body.color) !== 'undefined' && req.body.color.length === 0) error.push("field 'color' cannot be blank.");
 			if (typeof(req.body.gender) !== 'undefined' && req.body.gender.length === 0) error.push("field 'gender' cannot be blank.");
 			if (typeof(req.body.season) !== 'undefined' && req.body.season.length === 0) error.push("field 'season' cannot be blank.");
 			if (typeof(req.body.user) !== 'undefined' && req.body.user.length === 0) error.push("field 'user' cannot be blank.");
@@ -42,7 +42,7 @@ module.exports = {
 						cost       : req.body.cost,
 						quantity   : req.body.quantity,
 						startDate  : new Date(typeof(req.body.startDate) !== 'undefined' ?  req.body.startDate : null),
-						color      : req.body.color,
+						color      : req.body.color || null,
 						gender     : req.body.gender,
 						season     : typeof(req.body.season) === 'string' ? [req.body.season] : req.body.season,
 						user 			 : req.body.user,
@@ -65,6 +65,7 @@ module.exports = {
 
 		},
 		all: function(req,res,next){
+
 			Products.find()
 			.populate('user')
 			.then(function(p){
@@ -73,19 +74,35 @@ module.exports = {
 		},
 		one: function(req,res,next){
 			var id = req.param('id');
+			console.log('one id', id);
+
 			Products.findOne({id: id})
-			.populate('user')
 			.then(function(prod){
-				if(!prod) return res.json({error: ["product not found"]});
-				return res.json({product: prod, error: []})
+				console.log('one', prod );
+				return res.json({products: prod, error: []})
 			})
 			.catch(function(err){
+				console.log('error, err', err);
+				return res.json({error: [err]})
+			})
+		},
+		allUser: function( req, res, next){
+			var id = req.param('id');
+			console.log('all user id', id);
+			Products.find({user: id})
+			.then(function(prod){
+				console.log('one', prod );
+				return res.json({products: prod, error: []})
+			})
+			.catch(function(err){
+				console.log('error, err', err);
 				return res.json({error: [err]})
 			})
 		},
 		delete: function(req,res,next){
 			var id = req.param('id');
 			if ( typeof(id) === 'undefined' || !id ) return res.json({error: ["product id must be provided"]})
+
 			Products.findOne({id: id})
 			.then(function(product){
 				if ( !product ) return res.json({error: ["Product not found"]});
@@ -140,9 +157,9 @@ module.exports = {
 			if (typeof(req.body.name) !== 'undefined'&& req.body.name.length === 0) error.push("field 'name' cannot be blank.");
 			if (typeof(req.body.cost) !== 'undefined'&& req.body.cost.length === 0) error.push("field 'cost' cannot be blank.");
 			if (typeof(req.body.quantity) !== 'undefined' && req.body.quantity.length === 0) error.push("field 'quantity' cannot be blank.");
-			if (typeof(req.body.color) !== 'undefined' && req.body.color.length === 0) error.push("field 'color' cannot be blank.");
+			if (typeof(req.body.color) !== 'undefined' &&  req.body.color && req.body.color.length === 0) error.push("field 'color' cannot be blank.");
 			if (typeof(req.body.gender) !== 'undefined' && req.body.gender.length === 0) error.push("field 'gender' cannot be blank.");
-			if (typeof(req.body.season) !== 'undefined' && req.body.season.length === 0) error.push("field 'season' cannot be blank.");
+			//if (typeof(req.body.season) !== 'undefined' && req.body.season.length === 0) error.push("field 'season' cannot be blank.");
 			if (typeof(req.body.user) !== 'undefined' && req.body.user.length === 0) error.push("field 'user' cannot be blank.");
 			if (error.length > 0) return res.json({error: error});
 

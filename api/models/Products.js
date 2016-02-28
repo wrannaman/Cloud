@@ -14,7 +14,7 @@ module.exports = {
     startDate    : { type: "datetime", defaultsTo: new Date()},
     gender       : { type: "string", enum: ['male', 'female', 'both'] },
     season       : { type: "array"},
-    user         : { model: "users", required: true},
+    user         : { model: "user", required: true},
     photo        : { type: "string", defaultsTo: null},
   }
 };

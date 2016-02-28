@@ -8,13 +8,6 @@
 module.exports = {
 
   attributes: {
-    firstName  : { type: "string" },
-    lastName   : { type: "string" },
-    email      : { type: "string", unique: true },
-    password   : { type: "string", required: true },
-    products: {
-      collection: 'products',
-      via: 'user'
-    }
+
   }
 };
